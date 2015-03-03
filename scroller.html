@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes">
+    <meta name="description" content="Aakademya website">
+    <meta name="author" content="Aakademya">
+    <link rel="icon" href="images/favicon.ico">
+    <title>Scroller</title> 
+    <link href="includes/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        .section1, .section2, .section3, .section4, .section5{ display: block; height: 500px; }
+        .section1{ background: #EEE}
+        .section2{ background: #ECE}
+        .section3{ background: #EEC}
+        .section4{ background: #CCE}
+        .section5{ background: #ECC}
+        header{ position:relative; display: table;}
+        .nav{ position: fixed; z-index: 10;}
+    </style>
+</head>
+<body>
+    <header class="container">
+        <ul class="nav nav-pills">
+            <li><a href="#" class="link1" data-target=".section1">Link1</a></li>
+            <li><a href="#" class="link2" data-target=".section2">Link2</a></li>
+            <li><a href="#" class="link3" data-target=".section3">Link3</a></li>
+            <li><a href="#" class="link4" data-target=".section4">Link4</a></li>
+            <li><a href="#" class="link5" data-target=".section5">Link5</a></li>
+        </ul>
+    </header>
+    <div class="container">
+        <section class="section1 col-md-12"></section>
+        <section class="section2 col-md-12"></section>
+        <section class="section3 col-md-12"></section>
+        <section class="section4 col-md-12"></section>
+        <section class="section5 col-md-12"></section>
+    </div>
+    <script src="includes/scripts/jquery.min.js"></script>
+    <script src="includes/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        jQuery.noConflict();
+        (function($){
+            var Scroller = function(element, options){
+                var ele = $(element);
+                var obj = this;
+                
+                //merge options with default
+                var settings = $.extend({
+                    param: 'defaultValue'
+                }, options || {}); 
+                
+                //public method
+                this.pageScroll = function(){
+                    pluginMethod();
+                    //console.log('Public Method Page scroll has been called');
+                }
+                
+                //private method                
+                var pluginMethod = function(){
+                   // console.log('there is nothing inside private method');
+                    var eleScroll = ele.height();
+                    var eleTop = ele.offset().top;
+                    //console.log();
+                    //console.log(eleTop);
+                    if(ele.hasClass('scrolled')){
+                        $('body').animate({scrollTop: eleTop}, 1000);
+                        //console.log(eleTop);
+                        
+                    }
+                    else{
+                        $('body').animate({scrollTop: eleTop}, 1000);
+                    }
+                    ele.addClass('scrolled');
+                }
+            };
+            $.fn.scroller = function(options){
+                return this.each(function(){
+                    //exposing the objects of class
+                    var element = $(this);
+                    
+                    //check if already an instance created
+                    if(element.data('scroller')) return;
+                    
+                    //instantiating the class
+                    var scroller = new Scroller(this, options);
+                    
+                    //storing plugin's object in element's data
+                    element.data('scroller', scroller);
+                    //console.log(element);                    
+                });
+            };
+            //$('.nav-pills a').each(function(index, item){
+              //  console.log(item);
+                $('.nav-pills a').click(function(obj){
+                    var dataEle = $(this).attr('data-target');
+                    $(dataEle).scroller();            
+                    var testScroller = $(dataEle).data('scroller');
+                    testScroller.pageScroll(); //calling the public method of plugin
+                    //console.log(dataEle);
+                });
+            //});
+            })(jQuery);
+    </script>
+</body>
+</html>
